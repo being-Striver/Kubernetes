@@ -1,16 +1,12 @@
-Understanding K8s deployment strategy(deploying new application updates):
+# Understanding K8s deployment strategy(deploying new application updates):
 ----------------------------------------
-A deployment strategy is way to change or upgrade an application.
-How will you deploy v2 of your application to the k8s cluster?
+A deployment strategy is way to change or upgrade an application.How will you deploy v2 of your application to the k8s cluster?
 
--lets say you have a application v1 deployed on k8s cluster and it is running. after one week, the developer has created the new version of application with lot of new features.
- now the question is, how will you deploy this v2 of your application to the k8s cluster so that all of the production traffic goes to this specific version.so this is what is
- defined within deployment strategy.
- There is a lot of deployment strategy. for ex- lets say you go ahead and delete all the pods associated with V1 application and then you deploy v2 of your application.
+Let's say you have a application v1 deployed on k8s cluster and it is running. after one week, the developer has created the new version of application with lot of new features.now the question is, how will you deploy this v2 of your application to the k8s cluster so that all of the production traffic goes to this specific version.so this is what is defined within deployment strategy.There is a lot of deployment strategy. for ex- lets say you go ahead and delete all the pods associated with V1 application and then you deploy v2 of your application.
  
 
-Deployment strategy- recreate
------------------
+# Deployment strategy- `recreate` 
+--------------------------------
 All of the PODS get killed all at once and get replaced all at once with new ones.
 Recommended for dev/test.
 
@@ -79,7 +75,7 @@ Within this strategy,
 once the newer v2 application pod is ready and healthy, old one will get deleted one by one.
 
 
-Blue green deployment strategy:
+# Blue green deployment strategy:
 ---------------------------------
 Blue-green deployment is a technique that reduces downtime and risk by running two identical production environments called Blue and Green.
 
@@ -175,7 +171,7 @@ Modify the selector to demo-app-v2
 
 
 
-Canary deploymment:
+# Canary deploymment:
 -----------------------
 Canary deployment is a process where we deploy a new feature and shift some % of traffic to new feature to perform some analysis to see if feature is sucessful.
 Suppose we have two deployment where one deployment is running version 1 of your application and second deployment is running version 2 of your application.Now  what you can do is
