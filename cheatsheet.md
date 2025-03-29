@@ -73,44 +73,42 @@ to view pods in all namespace:
  - `kubectl run nginx --image=nginx --dry-run=client -o yaml`
  
  Create a Service named redis-service of type ClusterIP to expose pod redis on port 6379:
- -kubectl expose pod redis --port=6379 --name redis-service --dry-run=client -o yaml(this will automtically use pod's label as selector)
- -kubectl create service clusterip redis --tcp=6379:6379 --dry-run=client -o yaml(This will not use the pods' labels as selectors; instead it will assume selectors as app=redis)
+ - `kubectl expose pod redis --port=6379 --name redis-service --dry-run=client -o yaml` (this will automtically use pod's label as selector)
+ - `kubectl create service clusterip redis --tcp=6379:6379 --dry-run=client -o yaml` (This will not use the pods' labels as selectors; instead it will assume selectors as app=redis)
  
  Create a Service named nginx of type NodePort to expose pod nginx's port 80 on port 30080 on the nodes:
- -kubectl expose pod nginx --port=80 --name nginx-service --type=NodePort --dry-run=client -o yaml
+ - `kubectl expose pod nginx --port=80 --name nginx-service --type=NodePort --dry-run=client -o yaml`
 
 
 
-   Generate Deployment with 4 Replicas
-
-  -kubectl create deployment nginx --image=nginx --replicas=4
+ Generate Deployment with 4 Replicas:
+- `kubectl create deployment nginx --image=nginx --replicas=4`
   
   
- kubectl describe nodes --- it will give much sense about node.
+- `kubectl describe nodes` --- it will give much sense about node.
  
- kubectl cluster-info --it will tell you where controlplane is running and where is coreDNS is running.
- kubectl cluster-info dump --to see further investigation at cluster level
+- `kubectl cluster-info` --it will tell you where controlplane is running and where is coreDNS is running.
+- `kubectl cluster-info dump` --to see further investigation at cluster level
  
- kubectl replace --force  -f nginx.yaml  --first it will delete the pod and replace with new one. (when you edit the pod definition file, this command can be used)
- kubectl get pods -o wide --- it will show more details
- kubectl get pods --watch --
+- `kubectl replace --force  -f nginx.yaml`  --first it will delete the pod and replace with new one. (when you edit the pod definition file, this command can be used)
+- `kubectl get pods -o wide` --- it will show more details
+- `kubectl get pods --watch` --
  
  
- command to list every object within prod environment(including pods, replicasets, deployements, services etc)
- --kubectl get all --selector env=prod
+ command to list every object within prod environment(including pods, replicasets, deployements, services etc):
+ - `kubectl get all --selector env=prod`
  
  to apply multple filter condiitons:
-  --kubectl get pods --selector env=prod --selector bu=finance --selector tier=frontend
+- `kubectl get pods --selector env=prod --selector bu=finance --selector tier=frontend`
   
   
-  to apply taint on node01:
-  --kubectl taint node <node-name> key=value:<taint-effect>
+to apply taint on node01:
+- `kubectl taint node <node-name> key=value:<taint-effect>`
   
-  How do we untaint a node?
-  -kubectl taint node <node-name> key=value:<taint-effect>-  (adding a hyphen at the end will remove taint)
+How do we untaint a node:
+- `kubectl taint node <node-name> key=value:<taint-effect>` -  (adding a hyphen at the end will remove taint)
   
-  
-  kubectl taint node controlplane node-role.kubernetes.io/control-plane:NoSchedule-   => to untaint the controlplane node
+- `kubectl taint node controlplane node-role.kubernetes.io/control-plane:NoSchedule`-   => to untaint the controlplane node
   
   
   ERROR:
@@ -120,7 +118,7 @@ to view pods in all namespace:
 	
 	
  apply a label on node:
- -kubectl edit node <node-name> --then edit the label 
+ - `kubectl edit node <node-name>` --then edit the label 
  
  
  if you have a key defined on particular node, you can apply node affinity using operator "Exists" by specifying key only in affinity paramter like below:
@@ -133,6 +131,6 @@ to view pods in all namespace:
 			     operator: Exists
 				 
 	
-  #The application stores the log at /log/app.log. view the logs.
-   -kubectl exec <pod-name> -- cat /log/app.log
+#The application stores the log at /log/app.log. view the logs.
+- `kubectl exec <pod-name> -- cat /log/app.log`
 
