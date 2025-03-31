@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: emptyDir-Pod
+  labels:
+    app: emptyDir-shared
+spec:
+  containers:
+    - name: reader-container
+      image: busybox:latest
+      command: ["sh", "-c", "while true; do cat /var/temp/data.txt; sleep 5; done"]
+      volumeMounts:
+        - name: shared-volume
+          mountPath: /var/temp # This is where the reader container will read data
+      resources:
+        requests:
+          memory: "32Mi"
+          cpu: "100m"
+        limits:
+          memory: "64Mi"
+          cpu: "200m"
+    - name: writer-container
+      image: busybox:latest
+      command: ["sh", "-c", "while true; do echo 'Hello from writer container' > /var/temp/data.txt; sleep 10; done"]
+      volumeMounts:
+        - name: shared-volume
+          mountPath: /var/temp # This is where the writer container will write data
+      resources:
+        requests:
+          memory: "32Mi"
+          cpu: "100m"
+        limits:
+          memory: "64Mi"
+          cpu: "200m"
+  volumes:  
+    - name: shared-volume
+      emptyDir: {} # This volume will be shared between the containers
+  restartPolicy: Always

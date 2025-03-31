@@ -1,22 +1,36 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: nginx
+  name: nginx-app
   labels:
-    app: nginx
-    env: prod
+    app: nginx-app
+    env: dev
+
 spec:
   containers:
-    - name: nginx
-      image: nginx:1.22
+    - name: nginx-app
+      image: nginx:1.22.0
       ports:
-        - containerPort: 80
-      volumeMounts:   # This is where the volume will be mounted in the container.
-        - name: nginx-volume
-          mountPath: /usr/share/nginx/html # This data will be stored in the nginx-volume volume.
-
+        - name: http
+          containerPort: 80
+          protocol: TCP
+      env:
+        - name: DB_USER
+          value: "admin"
+        - name: DB_PASSWORD 
+          value: "password"
+      resources:
+        requests:
+          memory: "64Mi" # Mi = Mebibyte = 1024 * 1024 bytes 1Gi = 1024 * 1024 * 1024 bytes means 1Gi = 1024Mi
+          cpu: "250m"    # 1 core cpu = 1000m
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+      volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx/conf.d
+          readOnly: true
   volumes:
-    - name: nginx-volume
-      emptyDir: {}   # This volume is created when the Pod is assigned to a Node and exists as long as that Pod is running on that Node.
-
-
+    - name: nginx-config
+      configMap:
+        name: nginx-config

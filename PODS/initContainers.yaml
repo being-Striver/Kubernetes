@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp
+  labels:
+    name: myapp
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      imagePullPolicy: IfNotPresent  # Pull image only if not present(Always, IfNotPresent, Never)
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - name: myapp-volume
+          mountPath: /usr/share/nginx/html
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+  initContainers:
+    - name: install
+      image: alpine
+      command:
+        - wget    # download the file
+        - "-O"    # output file into myapp-volume
+        - "/myapp-volume/index.html"  # output file
+        - https://github.com/dubareddy/testcode/blob/master/index.html?raw=true
+      volumeMounts:
+        - name: myapp-volume
+          mountPath: "/myapp-volume"
+  volumes:
+    - name: myapp-volume
+      emptyDir: {}  # emptyDir volume type
