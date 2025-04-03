@@ -224,4 +224,24 @@ Application deployment using static pod:
 
 
 
+# Kubernetes workload resources
+------------------------------------
+1. ReplicationController(depcracated)
+2. ReplicaSet
+3. Deployment
+4. DaemonSet(If you want to run application on each and every node of your cluster including your control manager as well, then it is a good choice)
 
+up to here, we have discussed stateless k8s objects.
+-----------------------------------------------------------------------------------------------------------------------
+1. StatefulSet
+2. Jobs (to run a specific task)
+3. CronJobs (to run a specific task at specific time)
+4. Auto clean up for finished jobs
+
+All these workload resources will try to create pod. but will be managed through workload resources.
+
+
+# what is replication for kubernetes workload resources?
+--------------------------------------------------------
+Reliability: To ensure that we have minimum number of PODs running on the cluster for application to be accessible without downtime if any.
+Load balancing: We can add service object to load balance the traffic so that load will be  generated on specific POD running on the same node or different node.

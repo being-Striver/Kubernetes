@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: nginx-demo-rs
+  labels:
+    app: nginx
+    env: prod
+spec:
+  replicas: 2
+  selector:  # This selector must match the pod template labels
+    matchExpressions:
+      - {key: "app", operator: In, values: ["nginx"]}
+      - {key: "env", operator: NotIn, values: ["dev", "qa", "staging"]}
+
+      # for Exists and DoesNotExist operators, no values are needed
+      # syntax: - {key: "release", operator: Exists}
+  template:
+    metadata:
+      name: nginx-demo
+      labels:
+        app: nginx
+        env: prod
+        release: stable
+    spec:
+      containers:
+        - name: write-container
+          image: alpine
+          command: ["/bin/sh", "-c", "echo 'Hello from the write container!' > /usr/share/nginx/html/index.html"]
+          volumeMounts:
+            - name: nginx-volume
+              mountPath: /usr/share/nginx/html
+
+        - name: read-container
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-volume
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: nginx-volume
+          emptyDir: {}
+# This example demonstrates how to use matchExpressions in a ReplicaSet selector.

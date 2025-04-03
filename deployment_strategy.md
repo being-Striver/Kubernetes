@@ -11,7 +11,7 @@ All of the PODS get killed all at once and get replaced all at once with new one
 Recommended for dev/test.
 
 -kubectl deployment recreate-strategy --image=nginx --dry-run=client -o yaml
-
+              ```yaml
 				apiVersion: apps/v1
 				kind: Deployment
 				metadata: 
@@ -39,7 +39,7 @@ Recommended for dev/test.
 						name: nginx
 						resources: {}
 				status:{}
-
+             ```
 -kubectl explain deployment.spec.strategy
   --you will see two deployment strategy available(recreate and RollingUpdate).Default is RollingUpdate.
   

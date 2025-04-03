@@ -1,0 +1,14 @@
+# Workload Resource: Introduction to ReplicationController(rc)
+--------------------------------------------------------------
+- It makes sure that specified number of PODs(workload) are running at any given point of time on the cluster.
+- ReplicationController will make sure that only specified number of PODs are running and will add/remove if found any mismatch.
+- `apiVersion` for ReplicationController object is `v1`
+- `Workflow` : ReplicationController -> POD
+- It's recommended to deploy application on k8s with minimum workload resource ReplicationController instead of POD
+- We need to use ReplicaSet instead of ReplicationController as Deployment object uses ReplicaSet.
+- RC will use pod template to create POD with same specification based on the replica count( `.spec.replicas=1`)
+- scalein and scaleout of replicas are done using `#kubectl scale --replicas=<count> rc/<rc-name>`
+- Pod selector, `.spec.template.metadata.labels` should be equal to `.spec.selector` to handle pods by replicationController.
+- if `.spec.selector` is undefined, default it will set to `.spec.template.metadata.labels`
+- In order to delete POD managed under RC, delete RC not pod.
+- We can delete RC without deleting pod managed by RC. (`kubectl delete --cascade=orphan`)

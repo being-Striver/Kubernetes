@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+    env: prod
+spec:
+  replicas: 2
+  selector:  # This selector must match the pod template labels
+    matchLabels:
+      app: nginx
+      release: stable
+  template:
+    metadata:
+      name: nginx-demo
+      labels:
+        app: nginx
+        env: prod
+        release: stable
+    spec:
+      containers:
+        - name: write-container
+          image: alpine
+          command: ["/bin/sh", "-c", "echo 'Hello from the write container!' > /usr/share/nginx/html/index.html"]
+          volumeMounts:
+            - name: nginx-volume
+              mountPath: /usr/share/nginx/html
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+
+        - name: read-container
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-volume
+              mountPath: /usr/share/nginx/html
+
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+      # This is the volume that both containers will share
+      volumes:
+        - name: nginx-volume
+          emptyDir: {}
