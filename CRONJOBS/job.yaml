@@ -1,0 +1,23 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job-name
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+        - name: alpine
+          image: alpine
+          command: ["/bin/sh", "-c"]
+          args: ["echo Hello World"]
+      restartPolicy: Never # Do not restart the job on failure. It is recommended to set OnFailure for jobs that need to be retried.
+  # Optional: Specify the backoff limit and TTL for finished jobs
+  backoffLimit: 4  # Number of retries before marking the job as failed
+  ttlSecondsAfterFinished: 3600 # Time to live after completion (in seconds)
+  activeDeadlineSeconds: 7200 # Maximum time the job can run (in seconds)
+  # Optional: Specify the completion mode and parallelism
+  completionMode: Indexed # It is 
+  parallelism: 1
+  completions: 1
+  suspend: true # Suspend the job until resumed
